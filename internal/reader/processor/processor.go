@@ -21,6 +21,7 @@ import (
 	"miniflux.app/v2/internal/reader/sanitizer"
 	"miniflux.app/v2/internal/reader/scraper"
 	"miniflux.app/v2/internal/storage"
+	"miniflux.app/v2/internal/utils"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/tdewolff/minify/v2"
@@ -118,6 +119,7 @@ func ProcessFeedEntries(store *storage.Storage, feed *model.Feed, user *model.Us
 		filteredEntries = append(filteredEntries, entry)
 	}
 
+	utils.PostProcessEntriesTitle(feed, &filteredEntries)
 	feed.Entries = filteredEntries
 }
 

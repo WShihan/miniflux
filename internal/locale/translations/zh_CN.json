@@ -305,6 +305,7 @@
     "error.invalid_gesture_nav": "手势导航无效。",
     "error.invalid_default_home_page": "无效的默认主页!",
     "form.feed.label.title": "标题",
+    "form.feed.label.translatable": "翻译标题",
     "form.feed.label.site_url": "源网站 URL",
     "form.feed.label.feed_url": "订阅源 URL",
     "form.feed.label.description": "描述",

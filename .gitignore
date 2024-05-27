@@ -4,3 +4,5 @@ miniflux-*
 *.deb
 .idea
 .vscode
+*.ini
+*debug*

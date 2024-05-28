@@ -273,7 +273,10 @@ func (p *Parser) parseLines(lines []string) (err error) {
 			p.opts.invidiousInstance = parseString(value, defaultInvidiousInstance)
 		case "WEBAUTHN":
 			p.opts.webAuthn = parseBool(value, defaultWebAuthn)
+		case "TRANSLATE_URL":
+			p.opts.translateURL = parseString(value, defaultTranslateURL)
 		}
+
 	}
 
 	if port != "" {

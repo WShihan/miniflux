@@ -17,7 +17,7 @@ import (
 	"miniflux.app/v2/internal/reader/parser"
 	"miniflux.app/v2/internal/reader/processor"
 	"miniflux.app/v2/internal/storage"
-	"miniflux.app/v2/internal/utils"
+	"miniflux.app/v2/internal/utils/translate"
 )
 
 var (
@@ -309,7 +309,7 @@ func RefreshFeed(store *storage.Storage, userID, feedID int64, forceRefresh bool
 		// We don't update existing entries when the crawler is enabled (we crawl only inexisting entries). Unless it is forced to refresh
 		updateExistingEntries := forceRefresh || !originalFeed.Crawler
 		newEntries, storeErr := store.RefreshFeedEntries(originalFeed.UserID, originalFeed.ID, originalFeed.Entries, updateExistingEntries)
-		utils.PostProcessEntriesTitle(originalFeed, &newEntries)
+		translate.PostProcessEntriesTitle(originalFeed, &newEntries)
 		if storeErr != nil {
 			localizedError := locale.NewLocalizedErrorWrapper(storeErr, "error.database_error", storeErr)
 			originalFeed.WithTranslatedErrorMessage(localizedError.Translate(user.Language))

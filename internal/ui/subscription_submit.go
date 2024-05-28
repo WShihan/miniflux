@@ -105,6 +105,7 @@ func (h *handler) submitSubscription(w http.ResponseWriter, r *http.Request) {
 				UrlRewriteRules:             subscriptionForm.UrlRewriteRules,
 				FetchViaProxy:               subscriptionForm.FetchViaProxy,
 				DisableHTTP2:                subscriptionForm.DisableHTTP2,
+				Translatable:                subscriptionForm.Translatable,
 			},
 		})
 		if localizedError != nil {
@@ -132,6 +133,7 @@ func (h *handler) submitSubscription(w http.ResponseWriter, r *http.Request) {
 			UrlRewriteRules:             subscriptionForm.UrlRewriteRules,
 			FetchViaProxy:               subscriptionForm.FetchViaProxy,
 			DisableHTTP2:                subscriptionForm.DisableHTTP2,
+			Translatable:                subscriptionForm.Translatable,
 		})
 		if localizedError != nil {
 			v.Set("form", subscriptionForm)

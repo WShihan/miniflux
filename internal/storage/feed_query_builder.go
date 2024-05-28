@@ -165,7 +165,8 @@ func (f *FeedQueryBuilder) GetFeeds() (model.Feeds, error) {
 			fi.icon_id,
 			u.timezone,
 			f.apprise_service_urls,
-			f.disable_http2
+			f.disable_http2,
+			f.translatable
 		FROM
 			feeds f
 		LEFT JOIN
@@ -234,6 +235,7 @@ func (f *FeedQueryBuilder) GetFeeds() (model.Feeds, error) {
 			&tz,
 			&feed.AppriseServiceURLs,
 			&feed.DisableHTTP2,
+			&feed.Translatable,
 		)
 
 		if err != nil {

@@ -53,6 +53,7 @@ type Feed struct {
 	HideGlobally                bool      `json:"hide_globally"`
 	AppriseServiceURLs          string    `json:"apprise_service_urls"`
 	DisableHTTP2                bool      `json:"disable_http2"`
+	Translatable                bool      `json:"translatable"`
 
 	// Non persisted attributes
 	Category *Category `json:"category,omitempty"`
@@ -153,6 +154,7 @@ type FeedCreationRequest struct {
 	HideGlobally                bool   `json:"hide_globally"`
 	UrlRewriteRules             string `json:"urlrewrite_rules"`
 	DisableHTTP2                bool   `json:"disable_http2"`
+	Translatable                bool   `json:"translatable"`
 }
 
 type FeedCreationRequestFromSubscriptionDiscovery struct {
@@ -187,6 +189,7 @@ type FeedModificationRequest struct {
 	FetchViaProxy               *bool   `json:"fetch_via_proxy"`
 	HideGlobally                *bool   `json:"hide_globally"`
 	DisableHTTP2                *bool   `json:"disable_http2"`
+	Translatable                *bool   `json:"translatable"`
 }
 
 // Patch updates a feed with modified values.

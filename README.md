@@ -1,54 +1,65 @@
-Miniflux 2
-==========
+中文
 
-Miniflux is a minimalist and opinionated feed reader:
+本仓库派生自 [miniflux/v2](https://github.com/miniflux/v2)，在官方版本基础上，添加一些额外功能，目前可用：
 
-- Written in Go (Golang)
-- Works only with Postgresql
-- Doesn't use any ORM
-- Doesn't use any complicated framework
-- Use only modern vanilla Javascript (ES6 and Fetch API)
-- Single binary compiled statically without dependency
-- The number of features is voluntarily limited
+* 翻译标题：翻译订阅源标题到任意一门语言。
 
-It's simple, fast, lightweight and super easy to install.
+## 如何使用
 
-Official website: <https://miniflux.app>
+### 翻译标题
 
-Documentation
--------------
+你需要配置第三方翻译接口，目前支持[OpenAI](https://openai.com/)的ChatGPT和[百度智能云平台](https://cloud.baidu.com)的机器翻译（通用版），如果你没有权限访问上述服务，请先到对应官网申请。
 
-The Miniflux documentation is available here: <https://miniflux.app/docs/> ([Man page](https://miniflux.app/miniflux.1.html))
+在配置文件里添加`TRANSLATE_URL`，针对不同的翻译接口，该配置项的值有所不相同，
 
-- [Opinionated?](https://miniflux.app/opinionated.html)
-- [Features](https://miniflux.app/features.html)
-- [Requirements](https://miniflux.app/docs/requirements.html)
-- [Installation Instructions](https://miniflux.app/docs/installation.html)
-- [Upgrading to a New Version](https://miniflux.app/docs/upgrade.html)
-- [Configuration](https://miniflux.app/docs/configuration.html)
-- [Command Line Usage](https://miniflux.app/docs/cli.html)
-- [User Interface Usage](https://miniflux.app/docs/ui.html)
-- [Keyboard Shortcuts](https://miniflux.app/docs/keyboard_shortcuts.html)
-- [Integration with External Services](https://miniflux.app/docs/services.html)
-- [Rewrite and Scraper Rules](https://miniflux.app/docs/rules.html)
-- [API Reference](https://miniflux.app/docs/api.html)
-- [Development](https://miniflux.app/docs/development.html)
-- [Internationalization](https://miniflux.app/docs/i18n.html)
-- [Frequently Asked Questions](https://miniflux.app/faq.html)
+如果启用ChatGPT翻译，那么配置项的格式如下：
 
-Screenshots
------------
+```plain
+TRNASLATE_URL = chatgpt@url@key@model@language
+```
 
-Default theme:
+说明：
 
-![Default theme](https://miniflux.app/images/overview.png)
+> * Url: 接口地址
+> * key：访问密钥
+> * model：指定翻译模型
+> * language：翻译到目标语言（需要用英文指定，比如中文：chinese）
 
-Dark theme when using keyboard navigation:
+e.g
 
-![Dark theme](https://miniflux.app/images/item-selection-black-theme.png)
+```plain
+TRANSLATE_URL=chatgpt@https://oa.api2d.net/v1/chat/completions@fk222771-TpBm4qmwaOyiyI6W3esffdfdDTuIq@gpt-3.5-turbo@chinese
+```
 
-Credits
--------
 
-- Authors: Frédéric Guillot - [List of contributors](https://github.com/miniflux/v2/graphs/contributors)
-- Distributed under Apache 2.0 License
+
+
+
+百度智能云平台机器翻译通用版则为
+
+```plain
+TRANSLATE_URL = baidu_ml@clientid@secret@language
+```
+
+说明：
+
+> * clientid：百度智能云平台应用id
+> * secret：百度智能云平台应用密钥
+> * language：翻译到目标语言（这一部分参考百度智能云平台翻译文档描述）
+
+e.g
+
+```
+TRANSLATE_URL=baidu_ml@7mtS62xNRffffffVnP3VCaB@Yffffff8HptfCclcY5tGraONXpDEkn9@zh
+```
+
+
+
+### 效果
+
+![image-20240528222541593](https://md-1301600412.cos.ap-nanjing.myqcloud.com/pic/typora/image-20240528222541593.png)
+
+![image-20240528222448719](https://md-1301600412.cos.ap-nanjing.myqcloud.com/pic/typora/image-20240528222448719.png)
+
+![image-20240528222635201](https://md-1301600412.cos.ap-nanjing.myqcloud.com/pic/typora/image-20240528222635201.png)
+

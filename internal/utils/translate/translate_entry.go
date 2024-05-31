@@ -1,7 +1,10 @@
 package translate
 
 import (
+	"fmt"
+	"log/slog"
 	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -10,11 +13,22 @@ import (
 )
 
 type Translater interface {
-	Execute(entry *model.Entry, client *http.Client, wg *sync.WaitGroup, ak string)
+	Execute(ch chan struct{}, entry *model.Entry, client *http.Client, wg *sync.WaitGroup, ak string)
 	GetKey() string
 }
 
 func PostProcessEntriesTitle(feed *model.Feed, entries *model.Entries) {
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok := r.(error)
+			if !ok {
+				slog.Error(fmt.Errorf("pkg: %v", r).Error())
+				slog.Error(err.Error())
+			}
+			return
+		}
+	}()
 	if !feed.Translatable {
 		return
 	}
@@ -32,8 +46,12 @@ func PostProcessEntriesTitle(feed *model.Feed, entries *model.Entries) {
 	if translateURL == "" {
 		return
 	}
+
 	translateOpts := strings.Split(translateURL, "@")
 	which := strings.ToLower(translateOpts[0])
+	// refer to translate api max request times per second
+	numWorkers := 5
+
 	switch which {
 	case "chatgpt":
 		translatehandler = &ChatGPT{
@@ -42,6 +60,7 @@ func PostProcessEntriesTitle(feed *model.Feed, entries *model.Entries) {
 			Model: translateOpts[3],
 			To:    translateOpts[4],
 		}
+		numWorkers = 20
 	case "baidu_ml":
 		baiduMl := BaiduML{
 			Appid:  translateOpts[1],
@@ -51,13 +70,26 @@ func PostProcessEntriesTitle(feed *model.Feed, entries *model.Entries) {
 		}
 		baiduMl.InitKey()
 		translatehandler = &baiduMl
+	case "tencent_ml":
+		projID, _ := strconv.ParseInt(translateOpts[3], 10, 64)
+		tencentMl := TencentML{
+			SecretId:  translateOpts[1],
+			SecretKey: translateOpts[2],
+			ProjectId: projID,
+			Target:    translateOpts[4],
+			Source:    "auto",
+		}
+		tencentMl.InitKey(&tencentMl)
+		translatehandler = &tencentMl
+		numWorkers = 10
 	default:
-		panic("Unsupported translation service: " + which)
+		slog.Error("Unsupported translation service: " + which)
 	}
-
+	sem := make(chan struct{}, numWorkers)
 	for _, entry := range *entries {
 		wg.Add(1)
-		go translatehandler.Execute(entry, client, &wg, translatehandler.GetKey())
+		go translatehandler.Execute(sem, entry, client, &wg, translatehandler.GetKey())
 	}
 	wg.Wait()
+	slog.Info("finish")
 }

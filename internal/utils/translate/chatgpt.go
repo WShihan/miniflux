@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 
+	"log/slog"
 	"sync"
 
 	"miniflux.app/v2/internal/model"
@@ -51,7 +52,7 @@ func (chatgpt *ChatGPT) GetKey() string {
 	return chatgpt.Key
 }
 
-func (chatgpt *ChatGPT) Execute(entry *model.Entry, client *http.Client, wg *sync.WaitGroup, ak string) {
+func (chatgpt *ChatGPT) Execute(sem chan struct{}, entry *model.Entry, client *http.Client, wg *sync.WaitGroup, ak string) {
 	defer wg.Done()
 
 	prompt := fmt.Sprintf("You are an assistant, please translate my word into %s", chatgpt.To)
@@ -99,12 +100,14 @@ func (chatgpt *ChatGPT) Execute(entry *model.Entry, client *http.Client, wg *syn
 	jsonErr := json.Unmarshal(body, &response)
 	if jsonErr != nil {
 		fmt.Println("Error parsing JSON:", jsonErr)
+		slog.Error(fmt.Sprintf("Translate error: %s", entry.Title))
 		return
 	} else {
 		choices := response.Choices
 		if len(choices) != 0 {
 			content := choices[0].Message.Content
-			(*entry).Title += "｜" + content
+			slog.Info(fmt.Sprintf("Translate title:%s, result:%s", entry.Title, content))
+			entry.Title += "｜" + content
 		}
 		return
 	}

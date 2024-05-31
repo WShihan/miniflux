@@ -39,6 +39,8 @@ require (
 	github.com/prometheus/common v0.48.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/tdewolff/parse/v2 v2.7.14 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.932 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/tmt v1.0.932 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect

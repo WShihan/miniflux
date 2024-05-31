@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 	"strings"
 	"sync"
@@ -79,18 +80,10 @@ func (bdml BaiduML) GetKey() string {
 	return bdml.Authorization.Access_Token
 }
 
-func (bdml *BaiduML) Execute(entry *model.Entry, client *http.Client, wg *sync.WaitGroup, ak string) {
+func (bdml *BaiduML) Execute(sem chan struct{}, entry *model.Entry, client *http.Client, wg *sync.WaitGroup, ak string) {
 	defer wg.Done()
 	url := "https://aip.baidubce.com/rpc/2.0/mt/texttrans/v1?access_token=" + ak
 	var ResultRes BaiduMLResponse
-	// data := fmt.Sprintf(`{
-	// 	"q": "%s",
-	// 	"from": "%s",
-	// 	"to: "%s",
-	// 	"termIds": ""
-	// }`, entry.Title, bdml.From, bdml.To)
-	// payload := strings.NewReader(data)
-
 	data := fmt.Sprintf(`{
 		"q": "%s",
 		"from": "%s",
@@ -126,7 +119,11 @@ func (bdml *BaiduML) Execute(entry *model.Entry, client *http.Client, wg *sync.W
 		return
 	}
 	if len(ResultRes.Result.Trans_result) > 0 {
-		entry.Title += "｜" + ResultRes.Result.Trans_result[0].Dst
+		content := ResultRes.Result.Trans_result[0].Dst
+		slog.Info(fmt.Sprintf("Translate title:%s, result:%s", entry.Title, content))
+		entry.Title += "｜" + content
+	} else {
+		slog.Error(fmt.Sprintf("Translate error: %s, body:%s", entry.Title, body))
 	}
 
 }

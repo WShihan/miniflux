@@ -6,3 +6,4 @@ miniflux-*
 .vscode
 *.ini
 *debug*
+deb-build/

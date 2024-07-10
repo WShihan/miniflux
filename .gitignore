@@ -1,5 +1,6 @@
 miniflux-*
 ./miniflux
+deb-build
 *.rpm
 *.deb
 .idea

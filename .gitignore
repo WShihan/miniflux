@@ -1,4 +1,4 @@
-miniflux-*
+./*.sha256
 ./miniflux
 deb-build
 *.rpm
@@ -8,3 +8,8 @@ deb-build
 *.ini
 *debug*
 deb-build/
+.idea
+.vscode
+*.deb
+*.rpm
+miniflux-*

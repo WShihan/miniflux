@@ -240,7 +240,7 @@ func (s *Storage) CreateFeed(feed *model.Feed) error {
 			apprise_service_urls,
 			disable_http2,
 			description,
-			translatable
+			translatable,
 		)
 		VALUES
 			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27)
@@ -350,9 +350,11 @@ func (s *Storage) UpdateFeed(feed *model.Feed) (err error) {
 			apprise_service_urls=$27,
 			disable_http2=$28,
 			description=$29,
-			translatable=$30
+			ntfy_enabled=$30,
+			ntfy_priority=$31,
+			translatable=$34
 		WHERE
-			id=$31 AND user_id=$32
+			id=$32 AND user_id=$33
 	`
 	_, err = s.db.Exec(query,
 		feed.FeedURL,
@@ -384,9 +386,11 @@ func (s *Storage) UpdateFeed(feed *model.Feed) (err error) {
 		feed.AppriseServiceURLs,
 		feed.DisableHTTP2,
 		feed.Description,
-		feed.Translatable,
+		feed.NtfyEnabled,
+		feed.NtfyPriority,
 		feed.ID,
 		feed.UserID,
+		feed.Translatable,
 	)
 
 	if err != nil {

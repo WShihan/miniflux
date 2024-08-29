@@ -166,6 +166,8 @@ func (f *FeedQueryBuilder) GetFeeds() (model.Feeds, error) {
 			u.timezone,
 			f.apprise_service_urls,
 			f.disable_http2,
+			f.ntfy_enabled,
+			f.ntfy_priority,
 			f.translatable
 		FROM
 			feeds f
@@ -235,6 +237,8 @@ func (f *FeedQueryBuilder) GetFeeds() (model.Feeds, error) {
 			&tz,
 			&feed.AppriseServiceURLs,
 			&feed.DisableHTTP2,
+			&feed.NtfyEnabled,
+			&feed.NtfyPriority,
 			&feed.Translatable,
 		)
 

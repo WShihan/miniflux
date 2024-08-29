@@ -65,6 +65,8 @@ func (h *handler) showEditFeedPage(w http.ResponseWriter, r *http.Request) {
 		AppriseServiceURLs:          feed.AppriseServiceURLs,
 		DisableHTTP2:                feed.DisableHTTP2,
 		Translatable:                feed.Translatable,
+		NtfyEnabled:                 feed.NtfyEnabled,
+		NtfyPriority:                feed.NtfyPriority,
 	}
 
 	sess := session.New(h.store, request.SessionID(r))

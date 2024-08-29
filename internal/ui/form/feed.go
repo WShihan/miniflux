@@ -37,6 +37,8 @@ type FeedForm struct {
 	AppriseServiceURLs          string
 	DisableHTTP2                bool
 	Translatable                bool
+	NtfyEnabled                 bool
+	NtfyPriority                int
 }
 
 // Merge updates the fields of the given feed.
@@ -67,6 +69,8 @@ func (f FeedForm) Merge(feed *model.Feed) *model.Feed {
 	feed.AppriseServiceURLs = f.AppriseServiceURLs
 	feed.DisableHTTP2 = f.DisableHTTP2
 	feed.Translatable = f.Translatable
+	feed.NtfyEnabled = f.NtfyEnabled
+	feed.NtfyPriority = f.NtfyPriority
 	return feed
 }
 
@@ -75,6 +79,10 @@ func NewFeedForm(r *http.Request) *FeedForm {
 	categoryID, err := strconv.Atoi(r.FormValue("category_id"))
 	if err != nil {
 		categoryID = 0
+	}
+	ntfyPriority, err := strconv.Atoi(r.FormValue("ntfy_priority"))
+	if err != nil {
+		ntfyPriority = 0
 	}
 	return &FeedForm{
 		FeedURL:                     r.FormValue("feed_url"),
@@ -101,5 +109,7 @@ func NewFeedForm(r *http.Request) *FeedForm {
 		AppriseServiceURLs:          r.FormValue("apprise_service_urls"),
 		DisableHTTP2:                r.FormValue("disable_http2") == "1",
 		Translatable:                r.FormValue("translatable") == "1",
+		NtfyEnabled:                 r.FormValue("ntfy_enabled") == "1",
+		NtfyPriority:                ntfyPriority,
 	}
 }
